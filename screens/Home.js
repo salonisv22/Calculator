@@ -5,19 +5,13 @@ import { useState } from "react";
 import store from "../app/store";
 import { calcultorHistoryActions } from "../features/calculatorHistory/calculatorHistorySlice";
 
-import InputButton from "../components/InputButton";
-
 const buttonMatrix = [
-  ["00", "0", ".", "="],
-  ["1", "2", "3", "+"],
-  ["4", "5", "6", "-"],
-  ["7", "8", "9", "*"],
   ["C", "%", "⌫", "/"],
+  ["7", "8", "9", "*"],
+  ["4", "5", "6", "-"],
+  ["1", "2", "3", "+"],
+  ["00", "0", ".", "="],
 ];
-
-const goToHistory = (navigation) => {
-  return navigation.navigate("History");
-};
 
 export default function Home({ navigation }) {
   const [statement, setStatement] = useState("");
@@ -32,7 +26,7 @@ export default function Home({ navigation }) {
       case "=":
         const result = eval(statement);
         store.dispatch(calcultorHistoryActions.calculated([statement, result]));
-        console.log(store.getState());
+
         setStatement(result);
         break;
       default:
@@ -44,10 +38,12 @@ export default function Home({ navigation }) {
     <View className="bg-gray-950 w-full h-full flex">
       <Pressable onPress={() => navigation.navigate("History")}>
         <Text className=" text-white text-5xl self-end p-4">⏱</Text>
-        {/* <InputButton value={"⏱"} action={() => goToHistory(navigation)} /> */}
       </Pressable>
 
-      <View className=" flex-1 flex-col-reverse h-auto w-auto">
+      <View className=" flex-1 flex-col justify-end h-auto w-auto">
+        <View className="h-20 w-80px m-2 justify-center">
+          <Text className="text-right text-2xl text-white">{statement}</Text>
+        </View>
         {buttonMatrix.map((itr) => (
           <ButtonGroup
             key={itr[0]}
@@ -55,10 +51,6 @@ export default function Home({ navigation }) {
             evalAction={evalInput}
           ></ButtonGroup>
         ))}
-
-        <View className="h-20 w-80px m-2 justify-center">
-          <Text className="text-right text-2xl text-white">{statement}</Text>
-        </View>
       </View>
     </View>
   );
