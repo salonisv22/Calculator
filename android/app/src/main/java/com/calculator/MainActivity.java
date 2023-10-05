@@ -1,7 +1,8 @@
 package com.calculator;
 
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Build;
+
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -11,14 +12,20 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends ReactActivity {
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
-    // coloring the background, status bar, and navigation bar.
-    // This is required for expo-splash-screen.
-    setTheme(R.style.AppTheme);
     super.onCreate(null);
   }
+
+  // @Override
+  // protected void onCreate(Bundle savedInstanceState) {
+  //   // Set the theme to AppTheme BEFORE onCreate to support 
+  //   // coloring the background, status bar, and navigation bar.
+  //   // This is required for expo-splash-screen.
+  //   setTheme(R.style.AppTheme);
+  //   super.onCreate(null);
+  // }
 
   /**
    * Returns the name of the main component registered from JavaScript.

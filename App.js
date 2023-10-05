@@ -1,20 +1,42 @@
 import React from "react";
 import Home from "./screens/Home";
+import History from "./screens/History";
 import store from "./app/store";
 import { calcultorHistoryActions } from "./features/calculatorHistory/calculatorHistorySlice";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  console.log("initial state", store.getState());
-  const unsubscribe = store.subscribe(() => {
-    console.log("updated state", store.getState());
-  });
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 
-  store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
-  store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
-  store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
-  store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
-  store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
-  store.dispatch(calcultorHistoryActions.calculated("+0"));
-  unsubscribe();
-  return <Home />;
+  // console.log("initial state", store.getState());
+  // const unsubscribe = store.subscribe(() => {
+  //   console.log("updated state", store.getState());
+  // });
+
+  // store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
+  // store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
+  // store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
+  // store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
+  // store.dispatch(calcultorHistoryActions.calculated("3+5+7"));
+  // store.dispatch(calcultorHistoryActions.calculated("+0"));
+  // unsubscribe();
+  // return <Home />;
 }

@@ -3,7 +3,7 @@ import calculatorHistoryReducer from "../features/calculatorHistory/calculatorHi
 
 const store = configureStore({
   reducer: {
-    cake: calculatorHistoryReducer,
+    calculatorHistory: calculatorHistoryReducer,
   },
 });
 
