@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import ButtonGroup from "../components/ButtonGroup";
-import { useState } from "react";
-import store from "../app/store";
-import { calcultorHistoryActions } from "../features/calculatorHistory/calculatorHistorySlice";
+import { calculated } from "../features/calculatorHistory/calculatorHistorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clear,
+  backspace,
+  doublezero,
+  zero,
+  decimal,
+  operator,
+  result,
+  number,
+} from "../features/calculatorEval/calculatorEvalSlice";
 
 const buttonMatrix = [
   ["C", "%", "⌫", "/"],
@@ -14,23 +23,37 @@ const buttonMatrix = [
 ];
 
 export default function Home({ navigation }) {
-  const [statement, setStatement] = useState("");
+  const statement = useSelector((state) => state.calculatorEval.statement);
+  const resultVisible = useSelector(
+    (state) => state.calculatorEval.resultVisible
+  );
+  const dispatch = useDispatch();
+
   const evalInput = (value) => {
+    console.log(value);
+
     switch (value) {
       case "C":
-        setStatement("");
+        dispatch(clear());
         break;
       case "⌫":
-        setStatement(statement.slice(0, -1));
+        dispatch(backspace());
+        break;
+      case ".":
+        dispatch(decimal());
         break;
       case "=":
-        const result = eval(statement);
-        store.dispatch(calcultorHistoryActions.calculated([statement, result]));
-
-        setStatement(result);
+        dispatch(result());
+        dispatch(calculated([statement, eval(statement)]));
         break;
+      case "00":
+        dispatch(doublezero());
       default:
-        setStatement(statement + value);
+        if (isNaN(value)) {
+          dispatch(operator(value));
+        } else {
+          dispatch(number(value));
+        }
     }
   };
 
@@ -44,6 +67,16 @@ export default function Home({ navigation }) {
         <View className="h-20 w-80px m-2 justify-center">
           <Text className="text-right text-2xl text-white">{statement}</Text>
         </View>
+
+        {resultVisible ? (
+          <View className="h-20 w-80px m-2 justify-center">
+            <Text className="text-right text-2xl text-white">
+              {eval(statement)}
+            </Text>
+          </View>
+        ) : (
+          <></>
+        )}
         {buttonMatrix.map((itr) => (
           <ButtonGroup
             key={itr[0]}

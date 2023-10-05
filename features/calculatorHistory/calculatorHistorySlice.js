@@ -11,6 +11,7 @@ const calculatorHistorySlice = createSlice({
   initialState,
   reducers: {
     calculated: (state, action) => {
+      console.log("action...." + action.payload);
       if (state.history.length >= historyCount) {
         state.history.shift();
         state.history.push(action.payload);
@@ -21,5 +22,5 @@ const calculatorHistorySlice = createSlice({
   },
 });
 
-export const calcultorHistoryActions = calculatorHistorySlice.actions;
+export const { calculated } = calculatorHistorySlice.actions;
 export default calculatorHistorySlice.reducer;
