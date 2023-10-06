@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
 import ButtonGroup from "../components/ButtonGroup";
 import { calculated } from "../features/calculatorHistory/calculatorHistorySlice";
@@ -14,48 +14,171 @@ import {
   number,
 } from "../features/calculatorEval/calculatorEvalSlice";
 
-const buttonMatrix = [
-  ["C", "%", "⌫", "/"],
-  ["7", "8", "9", "*"],
-  ["4", "5", "6", "-"],
-  ["1", "2", "3", "+"],
-  ["00", "0", ".", "="],
-];
-
 export default function Home({ navigation }) {
+  const dispatch = useDispatch();
   const statement = useSelector((state) => state.calculatorEval.statement);
   const resultVisible = useSelector(
     (state) => state.calculatorEval.resultVisible
   );
-  const dispatch = useDispatch();
 
-  const evalInput = (value) => {
-    console.log(value);
-
-    switch (value) {
-      case "C":
-        dispatch(clear());
-        break;
-      case "⌫":
-        dispatch(backspace());
-        break;
-      case ".":
-        dispatch(decimal());
-        break;
-      case "=":
-        dispatch(result());
-        dispatch(calculated([statement, eval(statement)]));
-        break;
-      case "00":
-        dispatch(doublezero());
-      default:
-        if (isNaN(value)) {
+  const buttonObjectGroupMatrix = [
+    [
+      {
+        text: "C",
+        action: () => {
+          dispatch(clear());
+        },
+        style: `bg-zinc-700`,
+      },
+      {
+        text: "%",
+        action: (value) => {
           dispatch(operator(value));
-        } else {
+        },
+        style: `bg-zinc-700`,
+      },
+
+      {
+        text: "⌫",
+        action: () => {
+          dispatch(backspace());
+        },
+        style: `bg-zinc-700`,
+      },
+      {
+        text: "/",
+        action: (value) => {
+          dispatch(operator(value));
+        },
+        style: `bg-zinc-700`,
+      },
+    ],
+    [
+      {
+        text: "7",
+        action: (value) => {
           dispatch(number(value));
-        }
-    }
-  };
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "8",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+
+      {
+        text: "9",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "X",
+        action: () => {
+          dispatch(operator("*"));
+        },
+        style: `bg-zinc-700`,
+      },
+    ],
+    [
+      {
+        text: "4",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "5",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+
+      {
+        text: "6",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "-",
+        action: (value) => {
+          dispatch(operator(value));
+        },
+        style: `bg-zinc-700`,
+      },
+    ],
+    [
+      {
+        text: "1",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "2",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+
+      {
+        text: "3",
+        action: (value) => {
+          dispatch(number(value));
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "+",
+        action: (value) => {
+          dispatch(operator(value));
+        },
+        style: `bg-zinc-700`,
+      },
+    ],
+    [
+      {
+        text: "00",
+        action: () => {
+          dispatch(doublezero());
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "0",
+        action: () => {
+          dispatch(zero());
+        },
+        style: `bg-zinc-900`,
+      },
+
+      {
+        text: ".",
+        action: () => {
+          dispatch(decimal());
+        },
+        style: `bg-zinc-900`,
+      },
+      {
+        text: "=",
+        action: () => {
+          dispatch(result());
+          dispatch(calculated([statement, eval(statement)]));
+        },
+        style: `bg-sky-700`,
+      },
+    ],
+  ];
 
   return (
     <View className="bg-gray-950 w-full h-full flex">
@@ -77,11 +200,11 @@ export default function Home({ navigation }) {
         ) : (
           <></>
         )}
-        {buttonMatrix.map((itr) => (
+
+        {buttonObjectGroupMatrix.map((buttonObjectGroup) => (
           <ButtonGroup
-            key={itr[0]}
-            symbolArray={itr}
-            evalAction={evalInput}
+            key={buttonObjectGroup[0].text}
+            buttonObjectGroup={buttonObjectGroup}
           ></ButtonGroup>
         ))}
       </View>
