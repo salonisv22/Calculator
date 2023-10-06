@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
 import ButtonGroup from "../components/ButtonGroup";
 import { calculated } from "../features/calculatorHistory/calculatorHistorySlice";
@@ -14,20 +14,21 @@ import {
   number,
 } from "../features/calculatorEval/calculatorEvalSlice";
 
-const buttonMatrix = [
-  ["C", "%", "⌫", "/"],
-  ["7", "8", "9", "*"],
-  ["4", "5", "6", "-"],
-  ["1", "2", "3", "+"],
-  ["00", "0", ".", "="],
-];
-
 export default function Home({ navigation }) {
   const statement = useSelector((state) => state.calculatorEval.statement);
   const resultVisible = useSelector(
     (state) => state.calculatorEval.resultVisible
   );
   const dispatch = useDispatch();
+  const symbol = new Set(["C", "%", "⌫", "/", "*", "-", "+"]);
+
+  const buttonMatrix = [
+    ["C", "%", "⌫", "/"],
+    ["7", "8", "9", "*"],
+    ["4", "5", "6", "-"],
+    ["1", "2", "3", "+"],
+    ["00", "0", ".", "="],
+  ];
 
   const evalInput = (value) => {
     console.log(value);
@@ -48,6 +49,8 @@ export default function Home({ navigation }) {
         break;
       case "00":
         dispatch(doublezero());
+      case "0":
+        dispatch(zero());
       default:
         if (isNaN(value)) {
           dispatch(operator(value));
@@ -57,6 +60,12 @@ export default function Home({ navigation }) {
     }
   };
 
+  const buttonStyle = (arg) =>
+    arg === "="
+      ? `bg-sky-700`
+      : symbol.has(arg)
+      ? `bg-zinc-700`
+      : `bg-zinc-900`;
   return (
     <View className="bg-gray-950 w-full h-full flex">
       <Pressable onPress={() => navigation.navigate("History")}>
@@ -82,6 +91,7 @@ export default function Home({ navigation }) {
             key={itr[0]}
             symbolArray={itr}
             evalAction={evalInput}
+            evalStyle={buttonStyle}
           ></ButtonGroup>
         ))}
       </View>
