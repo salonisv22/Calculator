@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 const History = () => {
   const history = useSelector((state) => state.calculatorHistory.history);
-  console.log("...............history......." + history);
+
   return (
     <View className="bg-gray-950 w-full h-full flex-col justify-end">
       {history.map((itr, index) => {

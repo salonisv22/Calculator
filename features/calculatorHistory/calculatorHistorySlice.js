@@ -19,8 +19,11 @@ const calculatorHistorySlice = createSlice({
         state.history.push(action.payload);
       }
     },
+    deleted: (state) => {
+      state.history = [];
+    },
   },
 });
 
-export const { calculated } = calculatorHistorySlice.actions;
+export const { calculated, deleted } = calculatorHistorySlice.actions;
 export default calculatorHistorySlice.reducer;
